@@ -21,9 +21,12 @@ Le template affiche la donnée à l'aide du pipe | async.
 Le lazy loading est une méthode de développement qui consiste à charger les composants nécessaires uniquement lorsqu'on en a besoin. Cette méthode permet de ne pas surcharger la mémoire de l'application, améliorant ainsi sa fluidité.
 
 ### Comment structurer une app avec features/
-
+Les fonctionnalités d'une application Angular peuvent être regroupées dans des dossiers appelés features. Des sous-dossiers peuvent être créés suivant le type des fonctionnalités produites.
+Cette architecture est une bonne pratique à adopter durant le développement d'une appli, car elle permet de mieux organiser le code.
 
 ### Ce qu'est un composant dynamique
-
+Un composant dynamique est un composant qui n'est créé que lorsqu'on le demande. Cette création est effectuée avec la méthode createComposant de la classe ViewContainerRef.
 
 ### Comment fonctionne ViewContainerRef + createComponent()
+ViewContainerRef est une classe Angular qui permet de manipuler des composants dynamiques.
+La méthode createComponent() de la classe permet de créer un composant à l'emplacement souhaité sur le template du composant qui appelle la méthode. Pour se faire, une balise avec identifiant doit être placé dans le template. Ce dernier est récupéré avec la méthode ViewChild de la classe ComponentFixture. La méthode createComponent() prend en paramètre le composant à créer et le place dans le template à l'emplacement de la balise.

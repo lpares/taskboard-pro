@@ -59,4 +59,8 @@ export class TaskService {
     this.tasksSubject.next(this.tasks); // émet la nouvelle liste
     return of(this.tasks);
   }
+
+  deleteTasks() {
+    this.tasksSubject.next([]);
+  }
 }

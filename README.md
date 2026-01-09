@@ -27,3 +27,34 @@ Le lazy loading est une méthode de développement qui consiste à charger les c
 
 
 ### Comment fonctionne ViewContainerRef + createComponent()
+
+## Tests unitaires Angular
+
+### Pourquoi tester
+Tester les composants d'une application est primordial pour s'assurer du bon fonctionnement de cette dernière. Cela permet de visualiser les erreurs de syntaxe et de fonctionnement d'une ou de plusieurs parties de l'application avant son déploiement.
+
+### Outils utilisés
+Pour tester une application Angular, nous disposons des outils Jasmine, Karma et TestBed.
+Jasmine est le paquet principal de tests, il contient les fonctions de tests et les assertions.
+Karma est le serveur de tests qui permet de lancer les tests et de visualiser les résultats.
+TestBed est le module qui permet de créer un environnement de tests Angular.
+
+### Concepts clés
+Fixture : données fictives
+detectChanges() : lié à Fixture, force Angular à mettre à jour le template
+Spy : observation des appels d'une méthode (nombre d'appels réalisés, quels paramètres utilisés, etc)
+Mock : données simulées
+Test Runner : exécute les tests dans un environnement dédié sur navigateur
+Matcher : méthodes de comparaison sur un test
+AAA Patterns : ARRANGE, ACT, ASSERT ; c'est une structure de test :
+    - ARRANGE : préparation des données
+    - ACT : exécution du test
+    - ASSERT : vérification des résultats (comparaison entre l'attente du test et son résultat réel)
+
+### Types de tests pratiqués
+Les types de tests sont : 
+- unitaires
+- d'intégration
+- end-to-end
+- visuels
+Dans cette séquence, nous n'avons réalisé que des tests unitaires, qui représentent le type de tests le plus bas, au niveau fonctionnel. Ils permettent de tester les fonctions des composants de manière isolée.

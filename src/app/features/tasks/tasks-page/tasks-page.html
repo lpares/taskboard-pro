@@ -1,0 +1,46 @@
+<div #formNewTask>
+    <h2>Ajouter une nouvelle tâche : </h2>
+    
+    <label for="taskInputTitle">Titre de la tâche : </label>
+    <input #taskInputTitle type="text" placeholder="Acheter du lait" /><br />
+
+    <label for="taskInputDescription">Description de la tâche : </label>
+    <textarea #taskInputDescription type="text" placeholder="Il faut du lait de vache, pas de chèvre"></textarea><br />
+
+    <button (click)="addTask(taskInputTitle.value, taskInputDescription.value); taskInputTitle.value = ''; taskInputDescription.value = ''">
+        Ajouter
+    </button>
+</div>
+
+<div #updateContainer></div>
+
+@if (tasks$ | async; as tasks) {
+    <ul>
+        @for (task of tasks; track task.id) {
+            <li>
+                @if (task.completed) {
+                    <del>{{ task.title }}</del>
+                } @else {
+                    {{ task.title }}
+                }
+            </li>
+            <button (click)="highlight(task)">Mettre en avant</button>
+
+            <button (click)="update(task)">Modifier</button>
+        
+            <button (click)="finish(task)">
+                @if (task.completed) {
+                    Restaurer
+                } @else {
+                    Terminer
+                }
+            </button>
+            
+            <button (click)="delete(task)">Supprimer</button>
+        }
+    </ul>
+} @else {
+    <p>Chargement...</p>
+}
+
+<div #highlightContainer></div>

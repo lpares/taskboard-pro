@@ -14,3 +14,16 @@ Pour utiliser des données asynchrones dans l'application, il faut utiliser le p
 Le service émet une donnée à l'aide d'un BehaviorSubject.
 Le composant s'abonne à ce BehaviorSubject et récupère la donnée.
 Le template affiche la donnée à l'aide du pipe | async.
+
+## Lazy Loading & Composants dynamiques
+
+### Qu'est-ce que le Lazy Loading
+Le lazy loading est une méthode de développement qui consiste à charger les composants nécessaires uniquement lorsqu'on en a besoin. Cette méthode permet de ne pas surcharger la mémoire de l'application, améliorant ainsi sa fluidité.
+
+### Comment structurer une app avec features/
+
+
+### Ce qu'est un composant dynamique
+
+
+### Comment fonctionne ViewContainerRef + createComponent()

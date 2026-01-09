@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, delay, of } from 'rxjs';
+import { BehaviorSubject, delay, Observable, of } from 'rxjs';
 
 export interface TaskItem {
   id: number;
   title: string;
-  description: string;
+  description?: string;
   completed: boolean;
 }
 
@@ -22,17 +22,41 @@ export class TaskService {
   tasks$ = this.tasksSubject.asObservable();
 
   getTasks() {
-    return of(this.tasks).pipe(delay(2000));
+    return of(this.tasks);
   }
 
-  addTask(title:string) {
+  getTask(taskId:number) {
+    return of(this.tasks.find(task => task.id === taskId));
+  }
+
+  addTask(title:string, description?: string) {
     const newTask = { 
-      id: this.tasks.length + 1, 
+      id: Date.now(), 
       title, 
-      description: 'Description for Task ' + (this.tasks.length + 1),
+      description,
       completed: false
     };
     this.tasks.push(newTask);
     this.tasksSubject.next(this.tasks); // émet la nouvelle liste
+  }
+
+  updateTask(id: number, title: string, description?: string) : Observable<TaskItem[]> {
+    this.getTask(id).subscribe(task => {
+      if (task) {
+        task.title = title;
+        task.description = description;
+        console.log(task);
+        this.tasks = this.tasks.map(t => t.id === id ? { ...t, title, description } : t);
+        this.tasksSubject.next(this.tasks); // émet la nouvelle liste
+        console.log(this.tasks);
+      }
+    });
+    return of(this.tasks);
+  }
+
+  deleteTask(id: number) : Observable<TaskItem[]> {
+    this.tasks = this.tasks.filter(task => task.id !== id);
+    this.tasksSubject.next(this.tasks); // émet la nouvelle liste
+    return of(this.tasks);
   }
 }

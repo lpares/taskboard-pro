@@ -1,0 +1,10 @@
+<h2>Modifier la tâche : </h2>
+
+<label for="taskInputTitle">Titre de la tâche : </label>
+<input #taskInputTitle type="text" [value]="title" /><br />
+
+<label for="taskInputDescription">Description de la tâche : </label>
+<textarea #taskInputDescription type="text" [value]="description"></textarea><br />
+
+<button (click)="updateTask(taskInputTitle.value, taskInputDescription.value)">Valider la modification</button>
+<button (click)="cancelUpdate()">Annuler la modification</button>

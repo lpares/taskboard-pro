@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild, ViewContainerRef } from '@angular/core';
 import { TaskItem, TaskService } from '../../../core/services/task-service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -11,7 +11,8 @@ import { NotificationService } from '../../../core/services/notification-service
   selector: 'app-tasks-page',
   imports: [AsyncPipe, CommonModule, RouterModule],
   templateUrl: './tasks-page.html',
-  styleUrl: './tasks-page.css'
+  styleUrl: './tasks-page.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksPage {
   tasks$: Observable<any[]>;

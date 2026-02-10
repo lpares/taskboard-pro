@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-header',
   imports: [],
   templateUrl: './header.html',
-  styleUrl: './header.css'
+  styleUrl: './header.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Header {
   title = "TaskBoard Pro";

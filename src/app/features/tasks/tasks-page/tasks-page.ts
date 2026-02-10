@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { TaskHighlight } from "../task-highlight/task-highlight";
 import { RouterModule } from '@angular/router';
 import { TaskEdit } from '../task-edit/task-edit';
+import { NotificationService } from '../../../core/services/notification-service';
 
 @Component({
   selector: 'app-tasks-page',
@@ -22,6 +23,7 @@ export class TasksPage {
   updateContainer!: ViewContainerRef;
 
   private taskService = inject(TaskService);
+  private notificationService = inject(NotificationService);
 
   constructor() {
     this.tasks$ = this.taskService.getTasks();
@@ -29,6 +31,7 @@ export class TasksPage {
 
   addTask(title:string, description?:string) {
     this.taskService.addTask(title, description);
+    this.notificationService.whenAdding(title);
   }
 
   highlight(task: TaskItem) {
@@ -63,6 +66,7 @@ export class TasksPage {
     ref.instance.update.subscribe((updatedTask: { title: string, description: string }) => {
       this.taskService.updateTask(task.id, updatedTask.title, updatedTask.description);
       this.updateContainer.clear();
+      this.notificationService.whenUpdating(task.title);
     });
 
     // écoute l'événement cancel du composant TaskEdit
@@ -84,6 +88,7 @@ export class TasksPage {
     if (confirm(`Voulez-vous vraiment supprimer la tâche "${task.title}" ?`)) {
       this.taskService.deleteTask(task.id).subscribe(() => {
         this.tasks$ = this.taskService.getTasks();
+        this.notificationService.whenDeleting(task.title);
       });
     }
   }

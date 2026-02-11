@@ -9,19 +9,16 @@ import { NotificationService } from '../../../core/services/notification-service
 
 @Component({
   selector: 'app-tasks-page',
-  imports: [AsyncPipe, CommonModule, RouterModule],
+  imports: [AsyncPipe, CommonModule, RouterModule, TaskEdit, TaskHighlight],
   templateUrl: './tasks-page.html',
   styleUrl: './tasks-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksPage {
   tasks$: Observable<any[]>;
-  
-  @ViewChild('highlightContainer', {read: ViewContainerRef})
-  highlightContainer!: ViewContainerRef;
 
-  @ViewChild('updateContainer', {read: ViewContainerRef})
-  updateContainer!: ViewContainerRef;
+  highlightContainer: TaskHighlight | null = null;
+  updateContainer: TaskEdit | null = null;
 
   private taskService = inject(TaskService);
   private notificationService = inject(NotificationService);
@@ -36,49 +33,29 @@ export class TasksPage {
   }
 
   highlight(task: TaskItem) {
-    // efface le précédent contenu
-    this.highlightContainer.clear();
-
-    // crée le composant TaskHighlight
-    const ref = this.highlightContainer.createComponent(TaskHighlight);
-
-    // passe les données de la tâche au composant
-    ref.instance.title = task.title;
-    ref.instance.description = task.description;
-
-    // écoute l'événement unhighlight du composant pour fermer la fenêtre highlight
-    ref.instance.unhighlight.subscribe(() => {
-      this.highlightContainer.clear();
-    })
+    this.highlightContainer = new TaskHighlight();
+    this.highlightContainer!.title = task.title;
+    this.highlightContainer!.description = task.description;
+    this.highlightContainer.unhighlight.subscribe(() => {
+      this.highlightContainer = null;
+    });
   }
 
   update(task: TaskItem) {
-    // efface le précédent contenu
-    this.updateContainer.clear();
-
-    // crée le composant TaskEdit
-    const ref = this.updateContainer.createComponent(TaskEdit);
-
-    // passe les données de la tâche au composant
-    ref.instance.title = task.title;
-    ref.instance.description = task.description;
-
-    // écoute l'événement update du composant TaskEdit
-    ref.instance.update.subscribe((updatedTask: { title: string, description: string }) => {
-      this.taskService.updateTask(task.id, updatedTask.title, updatedTask.description);
-      this.updateContainer.clear();
-      this.notificationService.whenUpdating(task.title);
-    });
-
-    // écoute l'événement cancel du composant TaskEdit
-    ref.instance.cancel.subscribe(() => {
-      this.updateContainer.clear();
-      this.taskService.getTasks();
+    this.updateContainer = new TaskEdit();
+    this.updateContainer!.title = task.title;
+    this.updateContainer!.description = task.description;
+    this.updateContainer.update.subscribe((data) => {
+      this.taskService.updateTask(task.id, data.title, data.description).subscribe(() => {
+        this.tasks$ = this.taskService.getTasks();
+        this.notificationService.whenUpdating(task.title);
+        this.updateContainer = null;
+      });
     });
   }
 
   cancelUpdate() {
-    this.updateContainer.clear();
+    this.updateContainer = null;
   }
 
   finish(task: TaskItem) {
@@ -94,6 +71,3 @@ export class TasksPage {
     }
   }
 }
-
-
-

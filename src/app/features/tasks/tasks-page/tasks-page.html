@@ -1,3 +1,5 @@
+<div #notificationContainer></div>
+
 <div #formNewTask>
     <h2>Ajouter une nouvelle tâche : </h2>
     
@@ -12,7 +14,10 @@
     </button>
 </div>
 
-<div #updateContainer></div>
+<!-- <div #updateContainer></div> -->
+@if (updateContainer) {
+    <app-task-edit [title]="updateContainer.title" [description]="updateContainer.description" (update)="updateContainer.update.emit($event)" (cancel)="cancelUpdate()"></app-task-edit>
+}
 
 @if (tasks$ | async; as tasks) {
     <ul>
@@ -43,4 +48,6 @@
     <p>Chargement...</p>
 }
 
-<div #highlightContainer></div>
+@if (highlightContainer) {
+    <app-task-highlight [title]="highlightContainer.title" [description]="highlightContainer.description" />
+}

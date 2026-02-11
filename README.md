@@ -77,3 +77,6 @@ Aucun innerHTML n'est utilisé dans le code.
 Idem pour les scripts inline.
 L'ajout d'une tâche avec du HTML malveillant ne fonctionne comme attendu (en exécutant le HTML), car tous les noms des tâches passe par {{nom tâche}}.
 Lighthouse indique un score de 100 concernant les bonnes pratiques.
+
+## SSR Prerender
+Après ajout de SSR au projet, le score Lighthouse au niveau des performes passe à 99. C'est une nette amélioration.

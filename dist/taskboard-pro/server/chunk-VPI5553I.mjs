@@ -1,0 +1,2 @@
+import './polyfills.server.mjs';
+import{Ba as p,Xa as o,Ya as n,eb as a}from"./chunk-P4GUQP75.mjs";import"./chunk-X2SEQXRR.mjs";var t=class i{static \u0275fac=function(e){return new(e||i)};static \u0275cmp=p({type:i,selectors:[["app-about"]],decls:4,vars:0,template:function(e,s){e&1&&(o(0,"h2"),a(1,"A propos"),n(),o(2,"p"),a(3,"Infos sur l'application."),n())},encapsulation:2,changeDetection:0})};var f=[{path:"",component:t,pathMatch:"full"}];export{f as ABOUT_ROUTES};

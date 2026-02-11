@@ -62,15 +62,50 @@ Les types de tests sont :
 - visuels
 Dans cette séquence, nous n'avons réalisé que des tests unitaires, qui représentent le type de tests le plus bas, au niveau fonctionnel. Ils permettent de tester les fonctions des composants de manière isolée.
 
-## Performances
-### Audit de performance
+## Performances et optimisations
+Pour mesurer la performance d'une application Angular, nous pouvons utiliser les outils Lighthouse et Angular DevTools. Ces outils permettent d'analyser les performances, l'accessibilité, les bonnes pratiques et le SEO de l'application.
+Lighthouse fonctionne comme extension sur le navigateur Google Chrome et donne une série de scores au développeur lorsqu'il effectue un diagnostic sur son application. Ce diagnostic mesure :
+- les performances
+- l'accessibilité
+- les bonnes pratiques
+- le SEO
+de l'application. 
+Un bon score de performance se situe entre 90 et 100.
+Un score moyen est entre 50 et 89, signifiant que des améliorations sont à mettre en place.
+Un score médiocre se situe en dessous de 49, l'application n'est pas optimisée correctement.
+Lighthouse fournit en plus des scores des conseils pour améliorer le code afin d'obtenir un score plus élevé.
+Il est important de souligner qu'un score élevé en local ne signifie pas forcément que l'application aura un bon score en production. En effet, une application Angular en phase de développement possède un code JavaScript parfois non minifié et des chargements via le serveur de développement, faussant donc les scores. En revanche, une application en production possède un code JS minifié et optimisé, du lazy loading et des chargements via un serveur de production, ce qui améliore les scores et est plus représentatif pour les utilisateurs finaux.
+
+Angular DevTools est une extension sur navigateur qui permet de visualiser la structure d'une application Angular ouverte. Cela permet de voir en temps réel quels composants sont utilisés, leur agencement et leur état.
+
+Afin d'optimiser une application Angular, plusieurs bonnes pratiques sont à réaliser :
+- L'application doit vérifier si les inputs des composants changent, et non si les composants changent dans leur intégralité à chaque événement. Il est donc recommendé d'utiliser **changeDetection: ChangeDetectionStrategy.OnePush** dans l'application.
+- Si une liste sans identité stable est utilisée dans une boucle, il est préférable d'utiliser **track id** plutôt que **track element-list**.
+- Regrouper les **| async** pour éviter de créer plusieurs souscriptions.
+- Remplacer les créations impérative **ViewContainerRef** par des composants créés par déclarations basées sur un ou des états.
+
+### Audit de performance sur l'application
 Avant de modifier le code de l'application, son score Lighthouse était de 82, au niveau des performances et de l'accessibilité. Cette défaillance se situe au niveau du composant tasks-page, soit le composant le plus important de l'application, qui charge et affiche la liste des tâches. C'est l'opération initiale du chargement des sous-composants au lancement de l'application qui prend le plus de temps et ralentit sa performance.
 
 Le diagnostic Lighthouse conseille de réduire la taille des ressources JavaScript utilisées et inutilisées.
 Il faudrait également diviser le composant TasksPage en sous-composants, pour diviser sa charge de travail.
 
-### Optimisations
+### Optimisations sur l'application
 changeDetection: ChangeDetectionStrategy.OnPush a été ajouté sur le composant TasksPage, et tous les tracking de boucles utilise track id, et non track element-liste directement.
+
+## Sécurité
+Il est important de sécuriser une application frontend, pour éviter de révéler des données utilisateurs, de modifier le comportement d'APIs externes, de manipuler le DOM dynamiquement et d'avoir du code client lisible.
+
+Les principales menaces sur une application frontend sont :
+- XSS (Cross-Site Scripting) : injection de code malveillant dans la BDD (stored XSS), dans l'URL (reflected XSS) ou dans le DOM (DOM based XSS).
+- CSRF (Cross-Site Request Forgery) : déclenchement d'actions à la place de l'utilisateur, en utilisant ses cookies de navigateur.
+- Injection de code
+
+Pour protéger son appli face à ces menaces :
+- Utiliser des cookies SameSite côté serveur
+- Vérifier l'origin/referer côté serveur
+- Ne pas modifier directement les données des API (GET, POST, PUT, DELETE)
+- Définir une CSP (Content Security Policy), qui est une règle de sécurité appliquée par le navigateur pour limiter les droits de la page (ce qu'elle a le droit de charger et d'exécuter). Cette configuration se réalise en backend. Le rôle du CSP est de créer une liste blanche pour le navigateur.
 
 ### Audit de sécurité
 Aucun innerHTML n'est utilisé dans le code.
@@ -78,5 +113,33 @@ Idem pour les scripts inline.
 L'ajout d'une tâche avec du HTML malveillant ne fonctionne comme attendu (en exécutant le HTML), car tous les noms des tâches passe par {{nom tâche}}.
 Lighthouse indique un score de 100 concernant les bonnes pratiques.
 
-## SSR Prerender
+## Déploiement
+Le déploiement d'une application Angular signifie la "construction" de l'application pour la mettre en ligne sur un serveur accessible. La phase de déploiement diffère de sa phase de développement (**ng serve**). En effet, durant cette dernière :
+- Le rechargement de l'appli est automatique (hot reload)
+- Les messages d'erreurs sont détaillés
+- Des outils de debugage sont présents
+- Le code est lisible (non minifié)
+Ces fonctionnalités offrent un confort pour le développeur, mais masquent les vraies performances de l'application.
+
+Le passage en phase de production construit l'application :
+- En minifiant le code JS et CSS
+- En supprimant le code inutilisé (tree-shaking)
+- En découpant le code en bundles optimisés
+- En supprimant les outils de debugage
+- En optimisant les performances globales de l'application
+Le déploiement via **ng build** génère un dossier **dist/** qui contient l'application construite.
+
+Une application Angular peut être facilement déployée sur plusieurs plateformes :
+- GitHub page après l'ajout d'un fichier de configuration (**.github/workspaces/deploy.yml**)
+- Vercel après avoir établi une liaison entre le dépôt de l'application et la plateforme Vercel
+
+L'application peut être déployée en :
+- SSR (Server-Side Rendering) : génération du HTML par le serveur à chaque requête
+- Prerender : génération des pages HTML complètes au moment du build, avant le déploiement
+- SPA (SSR "statique") : pas de serveur applicatif, dossier dist/ avec js/css et index.html presque vide
+
+Le développeur choisit quelle technologie utiliser en fonctions des besoins applicatifs liés à la nature de son application. Par exemple, si son appli possède un SEO critique ou doit avoir un premier affichage très rapide, il est préférable d'utiliser le SSR. En revanche, si l'application requiert une connexion utilisateur, le SSR est inutile.
+L'ajout de SSR se fait via la commande **ng add @angular/ssr**.
+
+### SSR Prerender
 Après ajout de SSR au projet, le score Lighthouse au niveau des performes passe à 99. C'est une nette amélioration.

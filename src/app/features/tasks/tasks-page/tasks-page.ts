@@ -15,7 +15,7 @@ import { NotificationService } from '../../../core/services/notification-service
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksPage {
-  tasks$: Observable<any[]>;
+  tasks$: Observable<TaskItem[]>;
 
   highlightContainer: TaskHighlight | null = null;
   updateContainer: TaskEdit | null = null;
@@ -36,9 +36,10 @@ export class TasksPage {
     this.highlightContainer = new TaskHighlight();
     this.highlightContainer!.title = task.title;
     this.highlightContainer!.description = task.description;
-    this.highlightContainer.unhighlight.subscribe(() => {
-      this.highlightContainer = null;
-    });
+  }
+
+  unHightListTask() {
+    this.highlightContainer = null;
   }
 
   update(task: TaskItem) {

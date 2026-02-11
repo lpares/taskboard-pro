@@ -14,7 +14,6 @@
     </button>
 </div>
 
-<!-- <div #updateContainer></div> -->
 @if (updateContainer) {
     <app-task-edit [title]="updateContainer.title" [description]="updateContainer.description" (update)="updateContainer.update.emit($event)" (cancel)="cancelUpdate()"></app-task-edit>
 }
@@ -49,5 +48,5 @@
 }
 
 @if (highlightContainer) {
-    <app-task-highlight [title]="highlightContainer.title" [description]="highlightContainer.description" />
+    <app-task-highlight [title]="highlightContainer.title" [description]="highlightContainer.description" (unhighlight)="unHightListTask()" />
 }

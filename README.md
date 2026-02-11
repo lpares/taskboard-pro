@@ -61,3 +61,19 @@ Les types de tests sont :
 - end-to-end
 - visuels
 Dans cette séquence, nous n'avons réalisé que des tests unitaires, qui représentent le type de tests le plus bas, au niveau fonctionnel. Ils permettent de tester les fonctions des composants de manière isolée.
+
+## Performances
+### Audit de performance
+Avant de modifier le code de l'application, son score Lighthouse était de 82, au niveau des performances et de l'accessibilité. Cette défaillance se situe au niveau du composant tasks-page, soit le composant le plus important de l'application, qui charge et affiche la liste des tâches. C'est l'opération initiale du chargement des sous-composants au lancement de l'application qui prend le plus de temps et ralentit sa performance.
+
+Le diagnostic Lighthouse conseille de réduire la taille des ressources JavaScript utilisées et inutilisées.
+Il faudrait également diviser le composant TasksPage en sous-composants, pour diviser sa charge de travail.
+
+### Optimisations
+changeDetection: ChangeDetectionStrategy.OnPush a été ajouté sur le composant TasksPage, et tous les tracking de boucles utilise track id, et non track element-liste directement.
+
+### Audit de sécurité
+Aucun innerHTML n'est utilisé dans le code.
+Idem pour les scripts inline.
+L'ajout d'une tâche avec du HTML malveillant ne fonctionne comme attendu (en exécutant le HTML), car tous les noms des tâches passe par {{nom tâche}}.
+Lighthouse indique un score de 100 concernant les bonnes pratiques.
